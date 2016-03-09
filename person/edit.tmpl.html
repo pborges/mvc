@@ -1,0 +1,23 @@
+<html>
+<form method="post">
+    <div>
+        FirstName: <input name="FirstName" value="{{.FirstName}}">
+    </div>
+    <div>
+        LastName: <input name="LastName" value="{{.LastName}}">
+    </div>
+    <div>
+        Age: <input name="Age" value="{{.Age}}">
+    </div>
+
+    {{ range $i, $note := .Notes }}
+    <div>
+        Note {{$i}}: <input name="Notes[]" value="{{$note}}">
+    </div>
+    {{ end }}
+
+    <button name="_action" value="addnote">Add Note</button>
+    <button name="_action" value="leroyjenkins">Leroy Jenkins</button>
+    <button name="_action" value="save">Save</button>
+</form>
+</html>

@@ -1,0 +1,19 @@
+<html>
+<form method="post">
+    <div>
+        FirstName: {{.FirstName}}
+    </div>
+    <div>
+        LastName: {{.LastName}}
+    </div>
+    <div>
+        Age: {{.Age}}
+    </div>
+
+    {{ range $i, $note := .Notes }}
+    <div>
+        Note {{$i}}: {{$note}}
+    </div>
+    {{ end }}
+</form>
+</html>
