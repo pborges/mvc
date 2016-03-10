@@ -7,12 +7,13 @@
         LastName: <input name="LastName" value="{{.LastName}}">
     </div>
     <div>
-        Age: <input name="Age" value="{{.Age}}">
+        Age: <input name="Age" type="number" value="{{.Age}}">
     </div>
 
     {{ range $i, $note := .Notes }}
     <div>
         Note {{$i}}: <input name="Notes[]" value="{{$note}}">
+        <button name="_action" value="removenote.{{$i}}">Remove Note</button>
     </div>
     {{ end }}
 
@@ -20,4 +21,12 @@
     <button name="_action" value="leroyjenkins">Leroy Jenkins</button>
     <button name="_action" value="save">Save</button>
 </form>
+<br>
+<div>
+    {{ range $i, $err := .Errors}}
+    <div>
+        Error {{$i}}: {{$err}}
+    </div>
+    {{ end }}
+</div>
 </html>
