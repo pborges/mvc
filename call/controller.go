@@ -1,35 +1,36 @@
-package person
+package call
 
 import (
 	"net/http"
 	"strings"
+	"time"
 	"github.com/pborges/mvc/common"
+	"github.com/pborges/mvc/person"
 	log "github.com/Sirupsen/logrus"
 )
 
-const TemplatePrefix string = "tmpl/person/"
+const TemplatePrefix string = "tmpl/call/"
 
 func RegisterController() (c *Controller) {
-	log.WithField("controller", "person").Info("register controller")
+	log.WithField("controller", "call").Info("register controller")
 	c = new(Controller)
-	c.db = make([]*Person, 2)
+	c.db = make([]*Call, 1)
 
-	c.db[0] = new(Person)
-	c.db[0].FirstName = "jim"
-	c.db[0].LastName = "jones"
-	c.db[0].Notes = make([]string, 0)
-
-	c.db[1] = new(Person)
-	c.db[1].FirstName = "bob"
-	c.db[1].LastName = "dole"
-	c.db[1].Notes = make([]string, 0)
-
+	c.db[0] = new(Call)
+	c.db[0].Caller.FirstName = "jim"
+	c.db[0].Caller.LastName = "jones"
+	c.db[0].Caller.Notes = make([]string, 0)
+	c.db[0].ReasonForCalling = "Stick in a vice"
+	n := time.Now()
+	c.db[0].CreatedOn = &n
+	c.db[0].LastModified = &n
+	c.db[0].PhoneNumber = 2096750475
 	return c
 }
 
 type Controller struct {
 	common.Controller
-	db []*Person
+	db []*Call
 }
 
 func (this *Controller)List(w http.ResponseWriter, r *http.Request) {
@@ -51,7 +52,8 @@ func (this *Controller)Show(w http.ResponseWriter, r *http.Request) {
 
 	this.ViewLayout(model,
 		TemplatePrefix + "show.tmpl.html",
-		TemplatePrefix + "person.show.tmpl.html",
+		TemplatePrefix + "call.show.tmpl.html",
+		person.TemplatePrefix + "person.show.tmpl.html",
 	)(w, r)
 }
 
@@ -61,11 +63,9 @@ func (this *Controller)Edit(w http.ResponseWriter, r *http.Request) {
 		this.Error(err)(w, r)
 		return
 	}
-	p := new(Person)
+	p := new(Call)
 	*p = *this.db[id]
-
 	model := common.CreateViewModel()
-	model.ViewBag["prefix"] = "p1"
 	model.Model = p
 
 	if r.Method == "POST" {
@@ -77,23 +77,24 @@ func (this *Controller)Edit(w http.ResponseWriter, r *http.Request) {
 			case "Save":
 				if errs := p.Validate(); len(errs) == 0 {
 					this.db[id] = p
-					http.Redirect(w, r, "/person", 302)
+					http.Redirect(w, r, "/call", 302)
 				}else {
 					model.Errors = append(model.Errors, errs...)
 				}
 			case "Cancel":
-				http.Redirect(w, r, "/person", 302)
+				http.Redirect(w, r, "/call", 302)
 			default:
 				log.WithField("args", args).Warn("unknown action")
 			}
 		}
 		for _, e := range model.Errors {
-			log.WithField("id", id).WithField("model", "person").WithError(e).Warn("model has errors")
+			log.WithField("id", id).WithField("model", "call").WithError(e).Warn("model has errors")
 		}
 	}
 	this.ViewLayout(model,
 		TemplatePrefix + "edit.tmpl.html",
-		TemplatePrefix + "person.edit.tmpl.html",
+		TemplatePrefix + "call.edit.tmpl.html",
+		person.TemplatePrefix + "person.edit.tmpl.html",
 	)(w, r)
 }
 
@@ -104,5 +105,5 @@ func (this *Controller)Delete(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	this.db = append(this.db[:id], this.db[id + 1:]...)
-	http.Redirect(w, r, "/person", 302)
+	http.Redirect(w, r, "/call", 302)
 }

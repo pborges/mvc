@@ -1,0 +1,47 @@
+{{ define "person.edit" }}
+{{ $prefix := .Prefix }}
+{{ with .Model }}
+<div class="form-group">
+    <label for="{{$prefix}}.FirstName" class="col-sm-2 control-label">First Name</label>
+    <div class="col-sm-10">
+        <input class="form-control" id="{{$prefix}}.FirstName" name="{{$prefix}}.FirstName" value="{{.FirstName}}">
+    </div>
+</div>
+
+<div class="form-group">
+    <label for="{{$prefix}}.LastName" class="col-sm-2 control-label">Last Name</label>
+    <div class="col-sm-10">
+        <input class="form-control" id="{{$prefix}}.LastName" name="{{$prefix}}.LastName" value="{{.LastName}}">
+    </div>
+</div>
+
+<div class="form-group">
+    <label for="{{$prefix}}.Age" class="col-sm-2 control-label">Age</label>
+    <div class="col-sm-10">
+        <input type="number" class="form-control" id="{{$prefix}}.Age" name="{{$prefix}}.Age" value="{{.Age}}">
+    </div>
+</div>
+
+{{ range $i, $note := .Notes }}
+<div class="form-group">
+    <label for="{{$prefix}}.Notes[]" class="col-sm-2 control-label">Note {{$i}}</label>
+    <div class="col-sm-10">
+        <div class="input-group">
+            <input class="form-control" id="{{$prefix}}.Notes[]" name="{{$prefix}}.Notes[]" value="{{$note}}"/>
+            <span class="input-group-btn">
+                <button class="btn" name="{{$prefix}}._action" value="RemoveNote.{{$i}}">Remove</button>
+            </span>
+        </div>
+    </div>
+</div>
+{{ end }}
+<br>
+<div class="form-group">
+    <label for="{{$prefix}}.Age" class="col-sm-2 control-label"></label>
+    <div class="col-sm-10 text-right">
+        <button class="btn" name="{{$prefix}}._action" value="AddNote">Add Note</button>
+        <button class="btn" name="{{$prefix}}._action" value="LeroyJenkins">Leroy Jenkins</button>
+    </div>
+</div>
+{{ end }}
+{{ end }}

@@ -1,0 +1,21 @@
+{{define "body"}}
+{{ with .Errors }}
+<div>
+    {{ range $i, $err := .}}
+    <div>
+        Error {{$i}}: {{$err}}
+    </div>
+    {{ end }}
+</div>
+<br>
+{{ end }}
+<form method="post" role="form" class='form-horizontal'>
+    {{ template "call.edit" . }}
+    <div class="form-group">
+        <div class="col-sm-12 text-right">
+            <button class="btn" name="_action" value="Save">Save</button>
+            <button class="btn" name="_action" value="Cancel">Cancel</button>
+        </div>
+    </div>
+</form>
+{{end}}

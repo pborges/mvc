@@ -1,6 +1,6 @@
-<html>
-
-<table>
+{{define "body"}}
+{{with .Model}}
+<table class="table table-hover">
     <tr>
         <th>#</th>
         <th>First Name</th>
@@ -14,10 +14,13 @@
         <td>{{$p.FirstName}}</td>
         <td>{{$p.LastName}}</td>
         <td>{{$p.Age}}</td>
-        <td><a href="/person/{{$i}}">View</a></td>
-        <td><a href="/person/{{$i}}/edit">Edit</a></td>
-        <td><a href="/person/{{$i}}/delete">Delete</a></td>
+        <td>
+            <a href="/person/{{$i}}">View</a>
+            <a href="/person/{{$i}}/edit">Edit</a>
+            <a href="/person/{{$i}}/delete">Delete</a>
+        </td>
     </tr>
     {{ end }}
 </table>
-</html>
+{{end}}
+{{end}}
