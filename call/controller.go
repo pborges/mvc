@@ -73,18 +73,20 @@ func (this *Controller)Edit(w http.ResponseWriter, r *http.Request) {
 		if len(model.Errors) == 0 {
 			// run form actions
 			args := strings.Split(r.FormValue("_action"), ".")
-			switch args[0]{
-			case "Save":
-				if errs := p.Validate(); len(errs) == 0 {
-					this.db[id] = p
+			if len(args) > 0 {
+				switch args[0]{
+				case "Save":
+					if errs := p.Validate(); len(errs) == 0 {
+						this.db[id] = p
+						http.Redirect(w, r, "/call", 302)
+					}else {
+						model.Errors = append(model.Errors, errs...)
+					}
+				case "Cancel":
 					http.Redirect(w, r, "/call", 302)
-				}else {
-					model.Errors = append(model.Errors, errs...)
+				default:
+					log.WithField("args", args).WithField("model", "call").Warn("unknown action")
 				}
-			case "Cancel":
-				http.Redirect(w, r, "/call", 302)
-			default:
-				log.WithField("args", args).Warn("unknown action")
 			}
 		}
 		for _, e := range model.Errors {
