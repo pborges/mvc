@@ -3,12 +3,9 @@ package common
 import (
 	"net/http"
 	"strconv"
-	"html/template"
 	"github.com/gorilla/mux"
-	log "github.com/Sirupsen/logrus"
+	"github.com/pborges/log"
 )
-
-const TemplatePrefix string = "tmpl/common/"
 
 type Controller struct {
 }
@@ -26,19 +23,4 @@ func (this *Controller)GetIdFromURL(w http.ResponseWriter, r *http.Request) (id 
 	vars := mux.Vars(r)
 	id, err = strconv.Atoi(vars["id"])
 	return
-}
-
-func (this *Controller)ViewLayout(model *ViewModel, files... string) func(http.ResponseWriter, *http.Request) {
-	return func(w http.ResponseWriter, r *http.Request) {
-		files = append(files, TemplatePrefix + "/master.tmpl.html")
-		t, err := template.New("master.tmpl.html").Funcs(FuncMap).ParseFiles(files...)
-		if err != nil {
-			this.Error(err)(w, r)
-			return
-		}
-		err = t.Execute(w, model)
-		if err != nil {
-			panic(err)
-		}
-	}
 }

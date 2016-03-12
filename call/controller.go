@@ -6,7 +6,8 @@ import (
 	"time"
 	"github.com/pborges/mvc/common"
 	"github.com/pborges/mvc/person"
-	log "github.com/Sirupsen/logrus"
+	"github.com/pborges/log"
+	"github.com/pborges/mvc/view"
 )
 
 const TemplatePrefix string = "tmpl/call/"
@@ -34,10 +35,10 @@ type Controller struct {
 }
 
 func (this *Controller)List(w http.ResponseWriter, r *http.Request) {
-	model := common.CreateViewModel()
+	model := view.NewViewModel()
 	model.Model = this.db
 
-	this.ViewLayout(model, TemplatePrefix + "list.tmpl.html")(w, r)
+	view.Layout(model, TemplatePrefix + "list.tmpl.html")(w, r)
 }
 
 func (this *Controller)Show(w http.ResponseWriter, r *http.Request) {
@@ -47,10 +48,10 @@ func (this *Controller)Show(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	model := common.CreateViewModel()
+	model := view.NewViewModel()
 	model.Model = this.db[id]
 
-	this.ViewLayout(model,
+	view.Layout(model,
 		TemplatePrefix + "show.tmpl.html",
 		TemplatePrefix + "call.show.tmpl.html",
 		person.TemplatePrefix + "person.show.tmpl.html",
@@ -65,7 +66,7 @@ func (this *Controller)Edit(w http.ResponseWriter, r *http.Request) {
 	}
 	p := new(Call)
 	*p = *this.db[id]
-	model := common.CreateViewModel()
+	model := view.NewViewModel()
 	model.Model = p
 
 	if r.Method == "POST" {
@@ -93,7 +94,7 @@ func (this *Controller)Edit(w http.ResponseWriter, r *http.Request) {
 			log.WithField("id", id).WithField("model", "call").WithError(e).Warn("model has errors")
 		}
 	}
-	this.ViewLayout(model,
+	view.Layout(model,
 		TemplatePrefix + "edit.tmpl.html",
 		TemplatePrefix + "call.edit.tmpl.html",
 		person.TemplatePrefix + "person.edit.tmpl.html",

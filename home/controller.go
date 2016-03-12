@@ -2,8 +2,9 @@ package home
 
 import (
 	"net/http"
+	"github.com/pborges/log"
+	"github.com/pborges/mvc/view"
 	"github.com/pborges/mvc/common"
-	log "github.com/Sirupsen/logrus"
 )
 
 const TemplatePrefix string = "tmpl/home/"
@@ -19,6 +20,6 @@ type Controller struct {
 }
 
 func (this *Controller)Index(w http.ResponseWriter, r *http.Request) {
-	model := common.CreateViewModel()
-	this.ViewLayout(model, TemplatePrefix + "index.tmpl.html")(w, r)
+	model := view.NewViewModel()
+	view.Layout(model, TemplatePrefix + "index.tmpl.html")(w, r)
 }

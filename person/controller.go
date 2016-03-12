@@ -4,7 +4,8 @@ import (
 	"net/http"
 	"strings"
 	"github.com/pborges/mvc/common"
-	log "github.com/Sirupsen/logrus"
+	"github.com/pborges/log"
+	"github.com/pborges/mvc/view"
 )
 
 const TemplatePrefix string = "tmpl/person/"
@@ -33,10 +34,10 @@ type Controller struct {
 }
 
 func (this *Controller)List(w http.ResponseWriter, r *http.Request) {
-	model := common.CreateViewModel()
+	model := view.NewViewModel()
 	model.Model = this.db
 
-	this.ViewLayout(model, TemplatePrefix + "list.tmpl.html")(w, r)
+	view.Layout(model, TemplatePrefix + "list.tmpl.html")(w, r)
 }
 
 func (this *Controller)Show(w http.ResponseWriter, r *http.Request) {
@@ -46,10 +47,10 @@ func (this *Controller)Show(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	model := common.CreateViewModel()
+	model := view.NewViewModel()
 	model.Model = this.db[id]
 
-	this.ViewLayout(model,
+	view.Layout(model,
 		TemplatePrefix + "show.tmpl.html",
 		TemplatePrefix + "person.show.tmpl.html",
 	)(w, r)
@@ -64,7 +65,7 @@ func (this *Controller)Edit(w http.ResponseWriter, r *http.Request) {
 	p := new(Person)
 	*p = *this.db[id]
 
-	model := common.CreateViewModel()
+	model := view.NewViewModel()
 	model.ViewBag["prefix"] = "p1"
 	model.Model = p
 
@@ -93,7 +94,7 @@ func (this *Controller)Edit(w http.ResponseWriter, r *http.Request) {
 			log.WithField("id", id).WithField("model", "person").WithError(e).Warn("model has errors")
 		}
 	}
-	this.ViewLayout(model,
+	view.Layout(model,
 		TemplatePrefix + "edit.tmpl.html",
 		TemplatePrefix + "person.edit.tmpl.html",
 	)(w, r)

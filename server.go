@@ -1,19 +1,20 @@
 package main
 
 import (
-	"os"
 	"net/http"
 	"github.com/gorilla/mux"
 	"github.com/pborges/mvc/home"
 	"github.com/pborges/mvc/call"
 	"github.com/pborges/mvc/person"
-	log "github.com/Sirupsen/logrus"
+	"github.com/pborges/log"
+	"github.com/pborges/mvc/view"
 )
 
 const ListenAddress string = ":8080"
 
 func main() {
-	log.SetOutput(os.Stdout)
+	log.LogLevel = log.LevelDebug
+	view.CacheTemplates = false
 	log.Info("starting")
 	r := mux.NewRouter()
 
@@ -34,7 +35,7 @@ func main() {
 
 	// static
 	r.PathPrefix("/").Handler(http.FileServer(http.Dir("./static/")))
-	log.Info("listening on", ListenAddress)
+	log.Warn("listening on", ListenAddress)
 	log.Panic(http.ListenAndServe(ListenAddress, Log(r)))
 }
 

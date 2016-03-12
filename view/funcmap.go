@@ -1,4 +1,4 @@
-package common
+package view
 
 import (
 	"html/template"
@@ -11,7 +11,7 @@ var FuncMap template.FuncMap = template.FuncMap{
 }
 
 func Prefix(prefix string, m interface{}) (o *ViewModel) {
-	o = CreateViewModel()
+	o = NewViewModel()
 	o.Prefix = prefix
 	o.Model = m
 	return

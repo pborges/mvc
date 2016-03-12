@@ -1,6 +1,6 @@
-package common
+package view
 
-func CreateViewModel() (m *ViewModel) {
+func NewViewModel() (m *ViewModel) {
 	m = new(ViewModel)
 	m.ViewBag = make(map[string]interface{})
 	return
