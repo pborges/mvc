@@ -1,4 +1,4 @@
-package view
+package mvc
 
 import (
 	"net/http"
@@ -11,7 +11,7 @@ import (
 
 var SharedTemplatePrefix string = "tmpl/shared/"
 
-func Layout(model *ViewModel, files... string) func(http.ResponseWriter, *http.Request) {
+func RenderLayout(model *ViewModel, files... string) func(http.ResponseWriter, *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
 		files = append(files, SharedTemplatePrefix + "master.tmpl.html")
 		var err error

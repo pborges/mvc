@@ -1,4 +1,4 @@
-package view
+package mvc
 
 import (
 	"html/template"
@@ -6,11 +6,11 @@ import (
 )
 
 var FuncMap template.FuncMap = template.FuncMap{
-	"prefix":Prefix,
+	"prefix":PrefixViewModel,
 	"formatdate":FormatDate,
 }
 
-func Prefix(prefix string, m interface{}) (o *ViewModel) {
+func PrefixViewModel(prefix string, m interface{}) (o *ViewModel) {
 	o = NewViewModel()
 	o.Prefix = prefix
 	o.Model = m

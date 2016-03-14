@@ -4,10 +4,9 @@ import (
 	"net/http"
 	"strings"
 	"time"
-	"github.com/pborges/mvc/common"
+	"github.com/pborges/mvc"
 	"github.com/pborges/mvc/person"
 	"github.com/pborges/log"
-	"github.com/pborges/mvc/view"
 )
 
 const TemplatePrefix string = "tmpl/call/"
@@ -30,28 +29,27 @@ func RegisterController() (c *Controller) {
 }
 
 type Controller struct {
-	common.Controller
 	db []*Call
 }
 
 func (this *Controller)List(w http.ResponseWriter, r *http.Request) {
-	model := view.NewViewModel()
+	model := mvc.NewViewModel()
 	model.Model = this.db
 
-	view.Layout(model, TemplatePrefix + "list.tmpl.html")(w, r)
+	mvc.RenderLayout(model, TemplatePrefix + "list.tmpl.html")(w, r)
 }
 
 func (this *Controller)Show(w http.ResponseWriter, r *http.Request) {
-	id, err := this.GetIdFromURL(w, r)
+	id, err := mvc.GetIdFromRequest(w, r)
 	if err != nil {
-		this.Error(err)(w, r)
+		mvc.RenderError(err)(w, r)
 		return
 	}
 
-	model := view.NewViewModel()
+	model := mvc.NewViewModel()
 	model.Model = this.db[id]
 
-	view.Layout(model,
+	mvc.RenderLayout(model,
 		TemplatePrefix + "show.tmpl.html",
 		TemplatePrefix + "call.show.tmpl.html",
 		person.TemplatePrefix + "person.show.tmpl.html",
@@ -59,14 +57,14 @@ func (this *Controller)Show(w http.ResponseWriter, r *http.Request) {
 }
 
 func (this *Controller)Edit(w http.ResponseWriter, r *http.Request) {
-	id, err := this.GetIdFromURL(w, r)
+	id, err := mvc.GetIdFromRequest(w, r)
 	if err != nil {
-		this.Error(err)(w, r)
+		mvc.RenderError(err)(w, r)
 		return
 	}
 	p := new(Call)
 	*p = *this.db[id]
-	model := view.NewViewModel()
+	model := mvc.NewViewModel()
 	model.Model = p
 
 	if r.Method == "POST" {
@@ -94,7 +92,7 @@ func (this *Controller)Edit(w http.ResponseWriter, r *http.Request) {
 			log.WithField("id", id).WithField("model", "call").WithError(e).Warn("model has errors")
 		}
 	}
-	view.Layout(model,
+	mvc.RenderLayout(model,
 		TemplatePrefix + "edit.tmpl.html",
 		TemplatePrefix + "call.edit.tmpl.html",
 		person.TemplatePrefix + "person.edit.tmpl.html",
@@ -102,9 +100,9 @@ func (this *Controller)Edit(w http.ResponseWriter, r *http.Request) {
 }
 
 func (this *Controller)Delete(w http.ResponseWriter, r *http.Request) {
-	id, err := this.GetIdFromURL(w, r)
+	id, err := mvc.GetIdFromRequest(w, r)
 	if err != nil {
-		this.Error(err)(w, r)
+		mvc.RenderError(err)(w, r)
 		return
 	}
 	this.db = append(this.db[:id], this.db[id + 1:]...)

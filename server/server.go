@@ -3,18 +3,18 @@ package main
 import (
 	"net/http"
 	"github.com/gorilla/mux"
+	"github.com/pborges/mvc"
 	"github.com/pborges/mvc/home"
 	"github.com/pborges/mvc/call"
 	"github.com/pborges/mvc/person"
 	"github.com/pborges/log"
-	"github.com/pborges/mvc/view"
 )
 
 const ListenAddress string = ":8080"
 
 func main() {
 	log.LogLevel = log.LevelDebug
-	view.CacheTemplates = false
+	mvc.CacheTemplates = false
 	log.Info("starting")
 	r := mux.NewRouter()
 

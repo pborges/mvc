@@ -1,4 +1,4 @@
-package view
+package mvc
 
 import "html/template"
 

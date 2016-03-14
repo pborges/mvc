@@ -1,4 +1,4 @@
-package view
+package mvc
 
 func NewViewModel() (m *ViewModel) {
 	m = new(ViewModel)

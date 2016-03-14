@@ -3,9 +3,8 @@ package person
 import (
 	"net/http"
 	"strings"
-	"github.com/pborges/mvc/common"
+	"github.com/pborges/mvc"
 	"github.com/pborges/log"
-	"github.com/pborges/mvc/view"
 )
 
 const TemplatePrefix string = "tmpl/person/"
@@ -29,43 +28,42 @@ func RegisterController() (c *Controller) {
 }
 
 type Controller struct {
-	common.Controller
 	db []*Person
 }
 
 func (this *Controller)List(w http.ResponseWriter, r *http.Request) {
-	model := view.NewViewModel()
+	model := mvc.NewViewModel()
 	model.Model = this.db
 
-	view.Layout(model, TemplatePrefix + "list.tmpl.html")(w, r)
+	mvc.RenderLayout(model, TemplatePrefix + "list.tmpl.html")(w, r)
 }
 
 func (this *Controller)Show(w http.ResponseWriter, r *http.Request) {
-	id, err := this.GetIdFromURL(w, r)
+	id, err := mvc.GetIdFromRequest(w, r)
 	if err != nil {
-		this.Error(err)(w, r)
+		mvc.RenderError(err)(w, r)
 		return
 	}
 
-	model := view.NewViewModel()
+	model := mvc.NewViewModel()
 	model.Model = this.db[id]
 
-	view.Layout(model,
+	mvc.RenderLayout(model,
 		TemplatePrefix + "show.tmpl.html",
 		TemplatePrefix + "person.show.tmpl.html",
 	)(w, r)
 }
 
 func (this *Controller)Edit(w http.ResponseWriter, r *http.Request) {
-	id, err := this.GetIdFromURL(w, r)
+	id, err := mvc.GetIdFromRequest(w, r)
 	if err != nil {
-		this.Error(err)(w, r)
+		mvc.RenderError(err)(w, r)
 		return
 	}
 	p := new(Person)
 	*p = *this.db[id]
 
-	model := view.NewViewModel()
+	model := mvc.NewViewModel()
 	model.ViewBag["prefix"] = "p1"
 	model.Model = p
 
@@ -94,16 +92,16 @@ func (this *Controller)Edit(w http.ResponseWriter, r *http.Request) {
 			log.WithField("id", id).WithField("model", "person").WithError(e).Warn("model has errors")
 		}
 	}
-	view.Layout(model,
+	mvc.RenderLayout(model,
 		TemplatePrefix + "edit.tmpl.html",
 		TemplatePrefix + "person.edit.tmpl.html",
 	)(w, r)
 }
 
 func (this *Controller)Delete(w http.ResponseWriter, r *http.Request) {
-	id, err := this.GetIdFromURL(w, r)
+	id, err := mvc.GetIdFromRequest(w, r)
 	if err != nil {
-		this.Error(err)(w, r)
+		mvc.RenderError(err)(w, r)
 		return
 	}
 	this.db = append(this.db[:id], this.db[id + 1:]...)
