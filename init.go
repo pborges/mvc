@@ -1,6 +1,8 @@
 package mvc
 
-import "html/template"
+import (
+	"html/template"
+)
 
 var templateCache map[[32]byte]*template.Template
 var CacheTemplates = true

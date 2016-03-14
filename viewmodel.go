@@ -9,6 +9,5 @@ func NewViewModel() (m *ViewModel) {
 type ViewModel struct {
 	Model   interface{}
 	Errors  []error
-	Prefix  string
 	ViewBag map[string]interface{}
 }

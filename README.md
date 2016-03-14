@@ -1,4 +1,4 @@
-# MVC example
+# MVC
 
 this is very much a work in progress!
 
