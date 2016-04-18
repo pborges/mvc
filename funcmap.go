@@ -7,4 +7,5 @@ import (
 var FuncMap template.FuncMap = template.FuncMap{
 	"prefix":PrefixForm,
 	"formatdate":FormatDate,
+	"formatmoney":FormatMoney,
 }
