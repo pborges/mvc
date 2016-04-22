@@ -18,15 +18,23 @@ func RenderDetailedError(err *log.Entry) func(http.ResponseWriter, *http.Request
 	return func(w http.ResponseWriter, r *http.Request) {
 		err.Error("Error executing request")
 		w.WriteHeader(http.StatusInternalServerError)
+		var thrownError error
+		for i, e := range err.Keys {
+			if e == "err" {
+				thrownError = err.Values[i].(error)
+			}
+		}
 
 		e := struct {
+			Heading     string
 			Error      string
 			Package    string
 			Filename   string
 			LineNumber int
 			Fields     map[string]string
 		}{
-			Error:err.Msg,
+			Heading:err.Msg,
+			Error:thrownError.Error(),
 			Package:err.Package,
 			Filename:err.Filename,
 			LineNumber:err.Line,

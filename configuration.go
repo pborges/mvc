@@ -22,7 +22,7 @@ func (this *Configuration)clone() (c *Configuration) {
 	}
 
 	for k, v := range this.RightNav {
-		c.LeftNav[k] = v
+		c.RightNav[k] = v
 	}
 	return
 }
